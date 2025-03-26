@@ -4,45 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>System Monitor Dashboard</title>
-  <link href="assets/css/style.css" rel="stylesheet" />
+  <link href="dark.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-  <style>
-    /* Custom styles for active sidebar item */
-    .sidebar-item.active {
-      background-color: #4a5568; /* Gray background for active item */
-      color: #48bb78; /* Green text for active item */
-    }
-    .sidebar-item.active svg {
-      stroke: #48bb78; /* Green icon for active item */
-    }
-
-    .search-container {
-      display: flex;
-      justify-content: flex-end;
-      margin-bottom: 1rem;
-    }
-    .search-container input {
-      padding: 0.5rem;
-      border: 1px solid #d1d5db; /* Gray border */
-      border-radius: 0.375rem; /* Rounded corners */
-      width: 200px; /* Fixed width for the search bar */
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .search-container input:focus {
-      border-color: #3b82f6; /* Blue border on focus */
-    }
-  </style>
 </head>
 
 <body class="bg-gray-100">
+  <!-- Alert Banner -->
+  <div id="resource-alert" class="bg-yellow-500 text-white p-4 fixed top-4 right-4 rounded-lg shadow-lg hidden">
+    <p id="alert-message"></p>
+    <button id="close-alert" class="ml-4 text-white hover:text-gray-200">✖</button>
+  </div>
+
   <!-- Main Flex Container -->
   <div class="flex h-screen bg-gray-800">
     
     <!-- Sidebar -->
-    <aside class="w-60 bg-gray-800 text-white flex-shrink-0 overflow-y-auto">
+    <aside class="w-60 text-white flex-shrink-0 overflow-y-auto">
       <div>
         <!-- Sidebar Header -->
         <div class="flex p-4 bg-gray-800">
@@ -74,12 +53,34 @@
 
     <!-- Main Content Section -->
     <div class="flex-1 overflow-y-auto">
-      <header class="bg-gray-800 py-4 px-6">
-        <!-- Placeholder for header content -->
+      <header class="bg-gray-800 py-4 px-6 flex justify-between items-center">
+        <h1 class="text-white text-lg font-semibold">System Monitor Dashboard</h1>
+        <button id="theme-toggle" class="text-white focus:outline-none">
+          🌙
+        </button>
       </header>
 
       <!-- Dashboard Section -->
       <main id="dashboard-section" class="px-8 py-6">
+        <!-- System Overview -->
+        <div class="bg-white p-4 shadow rounded-lg mb-6">
+          <h4 class="text-lg font-medium">System Overview</h4>
+          <div class="grid grid-cols-3 gap-4">
+            <div>
+              <p class="text-sm text-gray-600">Total CPU Usage</p>
+              <p id="total-cpu" class="text-lg font-semibold text-blue-500">--%</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Total Memory Usage</p>
+              <p id="total-memory" class="text-lg font-semibold text-green-500">--%</p>
+            </div>
+            <div>
+              <p class="text-sm text-gray-600">Running Processes</p>
+              <p id="total-processes" class="text-lg font-semibold text-gray-900">--</p>
+            </div>
+          </div>
+        </div>
+
         <!-- CPU and Memory Usage -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- CPU Usage -->
@@ -99,20 +100,41 @@
 
         <!-- Process Table -->
         <div class="bg-white mt-8 p-4 shadow rounded-lg">
-          <h4 class="text-lg font-medium">Process List</h4>
-          <!-- Search Bar -->
+          <div class="flex justify-between items-center mb-4">
+            <h4 class="text-lg font-medium">Process List</h4>
+            <div class="flex items-center">
+              <button id="refresh-processes" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                Refresh
+              </button>
+              <!-- CHANGE: Added toggle for automatic updates -->
+              <div class="toggle-container">
+                <input type="checkbox" id="auto-update-toggle" />
+                <label for="auto-update-toggle">Auto-update</label>
+              </div>
+            </div>
+          </div>
           <div class="search-container">
-            <input type="text" id="process-search" placeholder="Search by process name..." />
+            <input type="text" id="process-search" placeholder="Search by process name or PID..." />
           </div>
           <div class="overflow-x-auto">
-            <table class="table-auto min-w-full">
+            <div id="process-loading" class="text-center py-4 hidden">
+              <svg class="animate-spin h-5 w-5 text-blue-500 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+              <span class="ml-2 text-gray-600">Loading...</span>
+            </div>
+            <div id="process-error" class="text-center py-4 text-red-500 hidden">
+              Failed to load processes. Please try again later.
+            </div>
+            <table id="process-table" class="table-auto min-w-full">
               <thead>
                 <tr>
-                  <th class="px-4 py-2">PID</th>
-                  <th class="px-4 py-2">Name</th>
-                  <th class="px-4 py-2">CPU %</th>
-                  <th class="px-4 py-2">Memory MB</th>
-                  <th class="px-4 py-2">Threads</th>
+                  <th class="px-4 py-2 cursor-pointer" onclick="sortTable('pid')">PID</th>
+                  <th class="px-4 py-2 cursor-pointer" onclick="sortTable('name')">Name</th>
+                  <th class="px-4 py-2 cursor-pointer" onclick="sortTable('cpu_percent')">CPU %</th>
+                  <th class="px-4 py-2 cursor-pointer" onclick="sortTable('memory_usage')">Memory MB</th>
+                  <th class="px-4 py-2 cursor-pointer" onclick="sortTable('num_threads')">Threads</th>
                   <th class="px-4 py-2">Action</th>
                 </tr>
               </thead>
@@ -146,24 +168,44 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal -->
+      <div id="process-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
+          <h3 class="text-lg font-medium mb-4">Process Details</h3>
+          <div id="process-details" class="space-y-2"></div>
+          <button id="close-modal" class="mt-4 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Close</button>
+        </div>
+      </div>
     </div>
   </div>
 
   <script>
     let cpuSeries = [], memorySeries = [];
+    let allProcesses = []; // Store all processes for filtering
+    let currentSearchTerm = ""; // Store the current search term
+    let sortDirection = 1; // 1 for ascending, -1 for descending
+    let lastSortedColumn = null;
+    let isFetchingProcesses = false;
+    // CHANGE: Added flag to track auto-update state
+    let autoUpdateEnabled = false;
 
     const cpuChart = new ApexCharts(document.querySelector("#cpu-chart"), {
       chart: { type: 'line', height: 200 },
       series: [{ name: "CPU %", data: [] }],
       xaxis: { type: 'datetime' },
-      yaxis: { max: 100 }
+      yaxis: { max: 100 },
+      colors: ['#3b82f6'],
+      stroke: { width: 2 }
     });
 
     const memoryChart = new ApexCharts(document.querySelector("#memory-chart"), {
       chart: { type: 'line', height: 200 },
       series: [{ name: "Memory %", data: [] }],
       xaxis: { type: 'datetime' },
-      yaxis: { max: 100 }
+      yaxis: { max: 100 },
+      colors: ['#48bb78'],
+      stroke: { width: 2 }
     });
 
     cpuChart.render();
@@ -171,7 +213,10 @@
 
     function updateUsage() {
       fetch("/get_system_usage")
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.json();
+        })
         .then(data => {
           const now = new Date().getTime();
           cpuSeries.push([now, data.cpu_percent]);
@@ -182,39 +227,120 @@
           memoryChart.updateSeries([{ data: memorySeries }]);
           document.getElementById("cpu-text").innerText = data.cpu_percent + "%";
           document.getElementById("memory-text").innerText = data.memory_percent + "%";
+          document.getElementById("total-cpu").innerText = data.cpu_percent + "%";
+          document.getElementById("total-memory").innerText = data.memory_percent + "%";
+        })
+        .catch(error => {
+          console.error("Error fetching system usage:", error);
         });
     }
 
-    function updateProcessTable() {
-      fetch("/get_processes")
-        .then(res => res.json())
-        .then(data => {
-          const table = document.getElementById("process-table-body");
-          table.innerHTML = "";
-          data.forEach(p => {
-            table.innerHTML += `
-              <tr>
-                <td class="px-4 py-2">${p.pid}</td>
-                <td class="px-4 py-2">${p.name}</td>
-                <td class="px-4 py-2">${p.cpu_percent}</td>
-                <td class="px-4 py-2">${p.memory_usage.toFixed(2)}</td>
-                <td class="px-4 py-2">${p.num_threads}</td>
-                <td class="px-4 py-2"><button onclick="terminate(${p.pid})" class="bg-red-500 text-white px-2 py-1 rounded">Terminate</button></td>
-              </tr>`;
-          });
-        });
-    }
+    function updateProcessTable(processesToDisplay = null) {
+      const table = document.getElementById("process-table-body");
+      let processes = processesToDisplay || allProcesses;
 
+      // Apply the current search filter if there is a search term
+      if (currentSearchTerm) {
+        processes = processes.filter(process => 
+          process.name.toLowerCase().includes(currentSearchTerm) ||
+          process.pid.toString().includes(currentSearchTerm)
+        );
+      }
+
+      table.innerHTML = "";
+      processes.forEach(p => {
+        table.innerHTML += `
+          <tr class="cursor-pointer hover:bg-gray-100" onclick="showProcessDetails(${JSON.stringify(p)})">
+            <td class="px-4 py-2">${p.pid}</td>
+            <td class="px-4 py-2">${p.name}</td>
+            <td class="px-4 py-2">${p.cpu_percent}</td>
+            <td class="px-4 py-2">${p.memory_usage.toFixed(2)}</td>
+            <td class="px-4 py-2">${p.num_threads}</td>
+            <td class="px-4 py-2"><button onclick="terminate(${p.pid}); event.stopPropagation();" class="bg-red-500 text-white px-2 py-1 rounded">Terminate</button></td>
+          </tr>`;
+      });
+    }
 
     function fetchAndUpdateProcesses() {
-      fetch("/get_processes")
-        .then(res => res.json())
+      if (isFetchingProcesses) return;
+      isFetchingProcesses = true;
+
+      const loadingSpinner = document.getElementById("process-loading");
+      const processTable = document.getElementById("process-table");
+      const errorMessage = document.getElementById("process-error");
+
+      loadingSpinner.classList.remove("hidden");
+      processTable.classList.add("hidden");
+      errorMessage.classList.add("hidden");
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+
+      fetch("/get_processes", { signal: controller.signal })
+        .then(res => {
+          clearTimeout(timeoutId);
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.json();
+        })
         .then(data => {
-          allProcesses = data; // Store all processes
-          updateProcessTable(); // Display all processes initially
+          console.log("Received processes:", data);
+          if (!Array.isArray(data)) {
+            throw new Error("Expected an array of processes, but received: " + JSON.stringify(data));
+          }
+
+          allProcesses = data;
+          document.getElementById("total-processes").innerText = allProcesses.length;
+
+          // Check for high resource usage
+          const highUsageProcesses = allProcesses.filter(p => p.cpu_percent > 80 || p.memory_usage > 500);
+          if (highUsageProcesses.length > 0) {
+            const alertBanner = document.getElementById("resource-alert");
+            const alertMessage = document.getElementById("alert-message");
+            const processNames = highUsageProcesses.slice(0, 3).map(p => p.name).join(", ");
+            const additionalCount = highUsageProcesses.length > 3 ? ` and ${highUsageProcesses.length - 3} more` : "";
+            alertMessage.textContent = `Warning: ${highUsageProcesses.length} process(es) with high resource usage detected! (${processNames}${additionalCount})`;
+            alertBanner.classList.remove("hidden");
+          }
+
+          updateProcessTable();
+          loadingSpinner.classList.add("hidden");
+          processTable.classList.remove("hidden");
+          errorMessage.classList.add("hidden");
+        })
+        .catch(error => {
+          console.error("Error fetching processes:", error.message);
+          loadingSpinner.classList.add("hidden");
+          processTable.classList.add("hidden");
+          errorMessage.classList.remove("hidden");
+          errorMessage.textContent = `Failed to load processes: ${error.message}. Please try again later.`;
+        })
+        .finally(() => {
+          isFetchingProcesses = false;
         });
     }
 
+    function sortTable(column) {
+      if (lastSortedColumn === column) {
+        sortDirection *= -1;
+      } else {
+        sortDirection = 1;
+      }
+      lastSortedColumn = column;
+
+      allProcesses.sort((a, b) => {
+        let valA = a[column];
+        let valB = b[column];
+        if (column === 'name') {
+          valA = valA.toLowerCase();
+          valB = valB.toLowerCase();
+        }
+        if (valA < valB) return -1 * sortDirection;
+        if (valA > valB) return 1 * sortDirection;
+        return 0;
+      });
+
+      updateProcessTable();
+    }
 
     function terminate(pid) {
       fetch("/terminate", {
@@ -222,35 +348,51 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ pid })
       })
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.json();
+        })
         .then(data => {
           alert(data.message || "Process terminated!");
-          updateProcessTable();
+          fetchAndUpdateProcesses();
+        })
+        .catch(error => {
+          console.error("Error terminating process:", error);
+          alert("Failed to terminate process. Please try again.");
         });
     }
 
+    function showProcessDetails(process) {
+      const modal = document.getElementById("process-modal");
+      const details = document.getElementById("process-details");
+      details.innerHTML = `
+        <p><strong>PID:</strong> ${process.pid}</p>
+        <p><strong>Name:</strong> ${process.name}</p>
+        <p><strong>CPU %:</strong> ${process.cpu_percent}</p>
+        <p><strong>Memory MB:</strong> ${process.memory_usage.toFixed(2)}</p>
+        <p><strong>Threads:</strong> ${process.num_threads}</p>
+      `;
+      modal.classList.remove("hidden");
+    }
+
     function showDashboard() {
-      // Show dashboard section and hide termination log
       document.getElementById('dashboard-section').classList.remove('hidden');
       document.getElementById('termination-log-section').classList.add('hidden');
-
-      // Update sidebar active state
       document.getElementById('dashboard-nav').classList.add('active');
       document.getElementById('termination-log-nav').classList.remove('active');
     }
 
     function showTerminationLog() {
-      // Hide dashboard section and show termination log
       document.getElementById('dashboard-section').classList.add('hidden');
       document.getElementById('termination-log-section').classList.remove('hidden');
-
-      // Update sidebar active state
       document.getElementById('dashboard-nav').classList.remove('active');
       document.getElementById('termination-log-nav').classList.add('active');
 
-      // Fetch the terminated processes log
       fetch("/get_terminated_processes")
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.json();
+        })
         .then(data => {
           const table = document.getElementById("termination-log-body");
           table.innerHTML = "";
@@ -264,25 +406,85 @@
                 <td class="px-4 py-2">${p.num_threads}</td>
               </tr>`;
           });
+        })
+        .catch(error => {
+          console.error("Error fetching terminated processes:", error);
         });
     }
 
-    // Search functionality
-    document.getElementById("process-search").addEventListener("input", function() {
-      const searchTerm = this.value.toLowerCase();
-      const filteredProcesses = allProcesses.filter(process => 
-        process.name.toLowerCase().includes(searchTerm)
-      );
-      updateProcessTable(filteredProcesses);
+    // Event Listeners
+    document.addEventListener("DOMContentLoaded", function() {
+      const searchInput = document.getElementById("process-search");
+      if (searchInput) {
+        searchInput.addEventListener("input", function() {
+          currentSearchTerm = this.value.toLowerCase();
+          updateProcessTable();
+        });
+      }
+
+      const refreshButton = document.getElementById("refresh-processes");
+      if (refreshButton) {
+        refreshButton.addEventListener("click", fetchAndUpdateProcesses);
+      }
+
+      const closeModalButton = document.getElementById("close-modal");
+      if (closeModalButton) {
+        closeModalButton.addEventListener("click", () => {
+          document.getElementById("process-modal").classList.add("hidden");
+        });
+      }
+
+      const closeAlertButton = document.getElementById("close-alert");
+      if (closeAlertButton) {
+        closeAlertButton.addEventListener("click", () => {
+          document.getElementById("resource-alert").classList.add("hidden");
+        });
+      }
+
+      // CHANGE: Add event listener for the auto-update toggle
+      const autoUpdateToggle = document.getElementById("auto-update-toggle");
+      if (autoUpdateToggle) {
+        autoUpdateToggle.addEventListener("change", function() {
+          autoUpdateEnabled = this.checked;
+          localStorage.setItem("autoUpdateEnabled", autoUpdateEnabled);
+        });
+        // Load the saved state from localStorage
+        const savedAutoUpdate = localStorage.getItem("autoUpdateEnabled");
+        autoUpdateEnabled = savedAutoUpdate === "true";
+        autoUpdateToggle.checked = autoUpdateEnabled;
+      }
+
+      updateUsage();
+      fetchAndUpdateProcesses();
     });
 
+    // Theme Toggle
+    const toggleTheme = () => {
+      const html = document.documentElement;
+      const isDarkMode = html.classList.toggle('dark');
+      const themeToggle = document.getElementById('theme-toggle');
+      themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    };
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.getElementById('theme-toggle').textContent = '☀️';
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.getElementById('theme-toggle').textContent = '🌙';
+    }
+
+    document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+    // CHANGE: Modified setInterval to check the auto-update toggle state
     setInterval(() => {
       updateUsage();
-      updateProcessTable();
+      if (autoUpdateEnabled) {
+        fetchAndUpdateProcesses();
+      }
     }, 5000);
-
-    updateUsage();
-    fetchAndUpdateProcesses();
   </script>
 </body>
 </html>
