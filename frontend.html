@@ -1,177 +1,274 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System Monitor Dashboard</title>
+  <link href="assets/css/style.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 </head>
 
-<body>
-    <div class="flex h-screen bg-gray-800">
-        <!-- Sidebar -->
-        <aside class="z-20 flex-shrink-0 hidden w-60 pl-2 overflow-y-auto bg-gray-800 md:block">
-            <div>
-                <div class="text-white">
-                    <div class="flex p-2 bg-gray-800">
-                        <div class="flex py-3 px-2 items-center">
-                            <p class="text-2xl text-green-500 font-semibold">PM</p>
-                            <p class="ml-2 font-semibold italic">PROCESS MONITOR</p>
-                        </div>
-                    </div>
-                    <div class="mt-6 leading-10">
-                        <ul>
-                            <li class="relative px-2 py-1">
-                                <a href="#" class="inline-flex items-center w-full text-sm font-semibold text-white hover:text-green-500">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                                    </svg>
-                                    <span class="ml-4">Dashboard</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <!-- Main Content -->
-        <div class="flex flex-col flex-1 w-full overflow-y-auto">
-            <header class="py-4 bg-gray-800">
-                <div class="flex items-center justify-between px-6 mx-auto">
-                    <h2 class="text-xl font-bold text-white">Process Monitoring Dashboard</h2>
-                </div>
-            </header>
-
-            <main class="p-4">
-                <!-- System Usage Charts -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                    <div class="p-4 bg-white shadow rounded-lg">
-                        <h3 class="text-sm font-semibold text-gray-500">CPU Usage (Real-Time)</h3>
-                        <div id="cpu-chart"></div>
-                    </div>
-                    <div class="p-4 bg-white shadow rounded-lg">
-                        <h3 class="text-sm font-semibold text-gray-500">Memory Usage (Real-Time)</h3>
-                        <div id="memory-chart"></div>
-                    </div>
-                </div>
-
-                <!-- Process Table -->
-                <div class="mt-6">
-                    <h3 class="text-lg font-semibold text-gray-700">Processes List</h3>
-                    <div class="mt-4">
-                        <table class="min-w-full bg-white rounded-lg">
-                            <thead>
-                                <tr>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Process ID</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CPU Usage</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Memory Usage</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Threads</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="process-list" class="divide-y divide-gray-200">
-                                <!-- Processes will be dynamically inserted here -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </main>
+<body class="bg-gray-100">
+  <!-- Main Flex Container (Added) -->
+  <div class="flex h-screen bg-gray-800">
+    
+    <!-- Sidebar (Integrated from frontend2.html) -->
+    <aside class="w-60 bg-gray-800 text-white flex-shrink-0 overflow-y-auto">
+      <div>
+        <!-- Sidebar Header -->
+        <div class="flex p-4 bg-gray-800">
+          
+          <p class="ml-2 font-semibold"> PROCESS DASHBOARD</p>
         </div>
+
+        <!-- Profile Section
+        <div class="flex justify-center mt-4">
+          <img class="h-24 w-24 rounded-full object-cover border-4 border-green-400"
+               src="https://image.flaticon.com/icons/png/512/149/149071.png" alt="Profile">
+          <p class="text-center text-gray-400 font-bold mt-2">Safwan</p>
+        </div>
+      -->
+
+        <!-- Sidebar Navigation -->
+        <ul class="mt-6">
+          <li class="px-2 py-1">
+            <a href="#" class="flex items-center text-white hover:text-green-500">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path d="M3 12l2-2 7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              <span class="ml-4">DASHBOARD</span>
+            </a>
+          </li>
+          <li class="px-2 py-1">
+            <a href="#" onclick="showTerminationLog()" class="flex items-center text-white hover:text-green-500">
+            <span class="ml-4">Termination Log</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </aside>
+    <!-- End of Sidebar -->
+
+    <!-- Main Content Section -->
+    <div class="flex-1 overflow-y-auto">
+      <header class="bg-gray-800 py-4 px-6">
+        <!-- Placeholder for header content -->
+      </header>
+
+      <!-- Dashboard Grid -->
+      <main class="px-8 py-6">
+        <!-- CPU and Memory Usage (Integrated from indexflask.html with Tailwind styling) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- CPU Usage -->
+          <div class="bg-white p-4 shadow rounded-lg">
+            <h5 class="text-lg font-medium">CPU Usage</h5>
+            <h3 id="cpu-text" class="text-blue-500">--%</h3>
+            <div id="cpu-chart" style="height: 200px;"></div>
+          </div>
+
+          <!-- Memory Usage -->
+          <div class="bg-white p-4 shadow rounded-lg">
+            <h5 class="text-lg font-medium">Memory Usage</h5>
+            <h3 id="memory-text" class="text-green-500">--%</h3>
+            <div id="memory-chart" style="height: 200px;"></div>
+          </div>
+        </div>
+
+        <!-- Process Table (Retained from indexflask.html with Tailwind styling) -->
+        <div class="bg-white mt-8 p-4 shadow rounded-lg">
+          <h4 class="text-lg font-medium">Process List</h4>
+          <div class="overflow-x-auto">
+            <table class="table-auto min-w-full">
+              <thead>
+                <tr>
+                  <th class="px-4 py-2">PID</th>
+                  <th class="px-4 py-2">Name</th>
+                  <th class="px-4 py-2">CPU %</th>
+                  <th class="px-4 py-2">Memory MB</th>
+                  <th class="px-4 py-2">Threads</th>
+                  <th class="px-4 py-2">Action</th>
+                </tr>
+              </thead>
+              <tbody id="process-table-body">
+                <!-- Process rows will be dynamically generated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+      <div id="termination-log" class="px-8 py-6 hidden">
+        <h4 class="text-lg font-medium">Termination Log</h4>
+        <div class="overflow-x-auto">
+          <table class="table-auto min-w-full">
+            <thead>
+              <tr>
+                <th class="px-4 py-2">PID</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">CPU %</th>
+                <th class="px-4 py-2">Memory MB</th>
+                <th class="px-4 py-2">Threads</th>
+              </tr>
+            </thead>
+            <tbody id="termination-log-body">
+              <!-- Terminated processes will be dynamically generated here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+<!--
+<body>
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <div class="col-xl-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">CPU Usage</h5>
+            <h3 id="cpu-text" class="text-primary">--%</h3>
+            <div id="cpu-chart" class="apex-charts" style="height: 200px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-6">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Memory Usage</h5>
+            <h3 id="memory-text" class="text-success">--%</h3>
+            <div id="memory-chart" class="apex-charts" style="height: 200px;"></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- ApexCharts Initialization and Real-Time Data Fetching -->
-    <script>
-        // Initialize charts
-        var cpuChart = new ApexCharts(document.querySelector("#cpu-chart"), {
-            chart: {
-                type: 'line',
-                height: 350,
-                animations: { enabled: true },
-            },
-            series: [{ name: "CPU Usage", data: [] }],
-            xaxis: { type: 'datetime' },
-            yaxis: { max: 100 }
-        });
+    <div class="card mt-4">
+      <div class="card-body">
+        <h4 class="card-title">Process List</h4>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>PID</th>
+                <th>Name</th>
+                <th>CPU %</th>
+                <th>Memory MB</th>
+                <th>Threads</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="process-table-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+-->
+  <script>
+    let cpuSeries = [], memorySeries = [];
 
-        var memoryChart = new ApexCharts(document.querySelector("#memory-chart"), {
-            chart: {
-                type: 'line',
-                height: 350,
-                animations: { enabled: true },
-            },
-            series: [{ name: "Memory Usage", data: [] }],
-            xaxis: { type: 'datetime' },
-            yaxis: { max: 100 }
-        });
+    const cpuChart = new ApexCharts(document.querySelector("#cpu-chart"), {
+      chart: { type: 'line', height: 200 },
+      series: [{ name: "CPU %", data: [] }],
+      xaxis: { type: 'datetime' },
+      yaxis: { max: 100 }
+    });
 
-        cpuChart.render();
-        memoryChart.render();
+    const memoryChart = new ApexCharts(document.querySelector("#memory-chart"), {
+      chart: { type: 'line', height: 200 },
+      series: [{ name: "Memory %", data: [] }],
+      xaxis: { type: 'datetime' },
+      yaxis: { max: 100 }
+    });
 
-        // Fetch system usage data from backend every 5 seconds
-        function fetchSystemUsage() {
-            fetch('http://127.0.0.1:5000/get_system_usage')
-                .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
+    cpuChart.render();
+    memoryChart.render();
+
+    function updateUsage() {
+      fetch("/get_system_usage")
+        .then(res => res.json())
         .then(data => {
-            var now = new Date().getTime();
-            cpuChart.updateSeries([{ name: "CPU Usage", data: [[now, data.cpu_percent]] }]);
-            memoryChart.updateSeries([{ name: "Memory Usage", data: [[now, data.memory_percent]] }]);
-        })
-        .catch(error => {
-            console.error('Error fetching system usage:', error);
-            alert('Error fetching system usage');
+          const now = new Date().getTime();
+          cpuSeries.push([now, data.cpu_percent]);
+          memorySeries.push([now, data.memory_percent]);
+          if (cpuSeries.length > 20) cpuSeries.shift();
+          if (memorySeries.length > 20) memorySeries.shift();
+          cpuChart.updateSeries([{ data: cpuSeries }]);
+          memoryChart.updateSeries([{ data: memorySeries }]);
+          document.getElementById("cpu-text").innerText = data.cpu_percent + "%";
+          document.getElementById("memory-text").innerText = data.memory_percent + "%";
         });
-}
+    }
 
-
-        // Fetch process list from backend
-        function fetchProcessList() {
-    fetch('http://127.0.0.1:5000/get_processes')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();  // Try to parse the JSON response
-        })
+    function updateProcessTable() {
+      fetch("/get_processes")
+        .then(res => res.json())
         .then(data => {
-            const processList = document.getElementById('process-list');
-            processList.innerHTML = '';  // Clear the table
-
-            data.forEach(process => {
-                let row = `
-                    <tr>
-                        <td class="px-6 py-4">${process.pid}</td>
-                        <td class="px-6 py-4">${process.name}</td>
-                        <td class="px-6 py-4">${process.cpu_percent}%</td>
-                        <td class="px-6 py-4">${process.memory_usage} MB</td>
-                        <td class="px-6 py-4">${process.num_threads}</td>
-                        <td class="px-6 py-4">
-                            <button class="text-red-500 hover:text-red-600" onclick="terminateProcess(${process.pid})">Terminate</button>
-                        </td>
-                    </tr>
-                `;
-                processList.innerHTML += row;
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching process list:', error);
-            alert('Error fetching process list: ' + error.message);
+          const table = document.getElementById("process-table-body");
+          table.innerHTML = "";
+          data.forEach(p => {
+            table.innerHTML += `
+              <tr>
+                <td class="px-4 py-2">${p.pid}</td>
+                <td class="px-4 py-2">${p.name}</td>
+                <td class="px-4 py-2">${p.cpu_percent}</td>
+                <td class="px-4 py-2">${p.memory_usage.toFixed(2)}</td>
+                <td class="px-4 py-2">${p.num_threads}</td>
+                <td class="px-4 py-2"><button onclick="terminate(${p.pid})" class="bg-red-500 text-white px-2 py-1 rounded">Terminate</button></td>
+              </tr>`;
+          });
         });
-}
+    }
 
-        
-        // Call fetch functions every 5 seconds
-        setInterval(fetchSystemUsage, 2000);
-        setInterval(fetchProcessList, 2000);
-    </script>
+    function terminate(pid) {
+      fetch("/terminate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pid })
+      })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message || "Process terminated!");
+        updateProcessTable();
+      });
+    }
+
+    function showTerminationLog() {
+      // Hide main dashboard and show termination log
+      document.querySelector('main').classList.add('hidden');
+      document.getElementById('termination-log').classList.remove('hidden');
+
+      // Fetch the terminated processes log
+      fetch("/get_terminated_processes")
+        .then(res => res.json())
+        .then(data => {
+          const table = document.getElementById("termination-log-body");
+          table.innerHTML = "";
+          data.forEach(p => {
+            table.innerHTML += `
+              <tr>
+                <td class="px-4 py-2">${p.pid}</td>
+                <td class="px-4 py-2">${p.name}</td>
+                <td class="px-4 py-2">${p.cpu_percent}</td>
+                <td class="px-4 py-2">${p.memory_usage.toFixed(2)}</td>
+                <td class="px-4 py-2">${p.num_threads}</td>
+              </tr>`;
+          });
+        });
+    }
+
+
+    setInterval(() => {
+      updateUsage();
+      updateProcessTable();
+    }, 5000);
+
+    updateUsage();
+    updateProcessTable();
+  </script>
 </body>
 </html>
