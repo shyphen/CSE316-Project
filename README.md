@@ -6,11 +6,11 @@ The Real-Time Process Monitoring Dashboard is a CSE316 project that provides rea
 
 Features
 
-- Real-time process monitoring**: Displays running processes with details like CPU and memory usage.
-- Process termination**: Allows users to terminate selected processes.
-- System performance monitoring**: Provides updates on key system parameters.
-- Responsive frontend**: A user-friendly UI for interacting with the system.
-- Backend API**: Handles system queries and user commands via Flask.
+- Real-time process monitoring: Displays running processes with details like CPU and memory usage.
+- Process termination: Allows users to terminate selected processes.
+- System performance monitoring: Provides updates on key system parameters.
+- Responsive frontend: A user-friendly UI for interacting with the system.
+- Backend API: Handles system queries and user commands via Flask.
 
 Technologies Used
 
