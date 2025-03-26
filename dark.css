@@ -1,0 +1,118 @@
+.sidebar-item.active {
+  background-color: #4a5568; /* Gray background for active item */
+  color: #48bb78; /* Green text for active item */
+}
+.sidebar-item.active svg {
+  stroke: #48bb78; /* Green icon for active item */
+}
+.sidebar-item:hover {
+  background-color: rgba(255, 255, 255, 0.1); /* Subtle white overlay on hover */
+  transition: background-color 0.2s ease-in-out;
+}
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+.search-container input {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db; /* Gray border */
+  border-radius: 0.375rem; /* Rounded corners */
+  width: 200px; /* Fixed width for the search bar */
+  outline: none;
+  transition: border-color 0.2s;
+}
+.search-container input:focus {
+  border-color: #3b82f6; /* Blue border on focus */
+}
+/* Sidebar background color with gradient and shadow */
+aside {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+aside .bg-gray-800 {
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+}
+aside .text-white {
+  color: #ffffff;
+}
+aside .hover\:text-green-500:hover {
+  color: #ffffff;
+}
+/* Dark mode adjustments */
+.dark aside {
+  background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+}
+.dark aside .bg-gray-800 {
+  background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
+}
+.dark .sidebar-item:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+.dark .search-container input {
+  border-color: #718096;
+}
+.dark .sidebar-item.active {
+  background-color: #718096;
+}
+/* Chart styles */
+#cpu-chart, #memory-chart {
+  background-color: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+}
+.dark #cpu-chart, .dark #memory-chart {
+  background-color: #2d3748;
+  border-color: #4a5568;
+}
+/* Button hover effects */
+.bg-red-500:hover {
+  background-color: #e53e3e;
+  transition: background-color 0.2s ease-in-out;
+}
+.dark .bg-red-500:hover {
+  background-color: #f56565;
+}
+/* Typography and spacing */
+h4, h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+table td, table th {
+  padding: 0.75rem 1rem;
+}
+/* Modal styles */
+.dark #process-modal .bg-white {
+  background-color: #2d3748;
+}
+.dark #process-modal .text-gray-900 {
+  color: #e2e8f0;
+}
+/* Alert styles */
+.dark #resource-alert {
+  background-color: #d69e2e;
+}
+/* Header styles */
+header {
+  background-color: #1a202c;
+}
+.dark header {
+  background-color: #2d3748;
+}
+/* CHANGE: Style for the toggle switch */
+.toggle-container {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+}
+.toggle-container label {
+  margin-left: 0.5rem;
+  font-size: 0.875rem;
+  color: #4a5568;
+}
+.dark .toggle-container label {
+  color: #a0aec0;
+}
