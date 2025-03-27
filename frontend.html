@@ -8,13 +8,18 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+  <!-- CHANGE: Added modern font stack via Google Fonts (Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100">
-  <!-- Alert Banner -->
-  <div id="resource-alert" class="bg-yellow-500 text-white p-4 fixed top-4 right-4 rounded-lg shadow-lg hidden">
-    <p id="alert-message"></p>
-    <button id="close-alert" class="ml-4 text-white hover:text-gray-200">✖</button>
+<body class="bg-gray-100 font-inter"> <!-- CHANGE: Added Inter font to body -->
+  <!-- CHANGE: Modified alert banner to use amber-600, added warning icon, and made it full-width -->
+  <div id="resource-alert" class="bg-amber-600 text-white p-4 fixed top-0 left-0 right-0 rounded-b-lg shadow-lg hidden animate-fade-in">
+    <div class="flex items-center justify-center">
+      <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M12 3a9 9 0 110 18 9 9 0 010-18z" /></svg>
+      <p id="alert-message"></p>
+      <button id="close-alert" class="ml-4 text-white hover:text-gray-200">✖</button>
+    </div>
   </div>
 
   <!-- Main Flex Container -->
@@ -23,29 +28,70 @@
     <!-- Sidebar -->
     <aside class="w-60 text-white flex-shrink-0 overflow-y-auto">
       <div>
-        <!-- Sidebar Header -->
-        <div class="flex p-4 bg-gray-800">
-          <p class="ml-2 font-semibold">PROCESS DASHBOARD</p>
+        <!-- CHANGE: Updated sidebar header with bg-gray-900, bolder font, and more padding -->
+        <div class="flex p-6 bg-gray-900">
+          <p class="ml-2 font-bold">PROCESS DASHBOARD</p>
         </div>
 
         <!-- Sidebar Navigation -->
         <ul class="mt-6">
-          <li class="px-2 py-1 sidebar-item active" id="dashboard-nav">
-            <a href="#" onclick="showDashboard()" class="flex items-center text-white hover:text-green-500">
+          <!-- CHANGE: Replaced hover:text-green-500 with hover:text-blue-300, added active styling -->
+          <li class="px-4 py-2 sidebar-item active" id="dashboard-nav">
+            <a href="#" onclick="showDashboard()" class="flex items-center text-white hover:text-blue-300">
               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path d="M3 12l2-2 7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
               </svg>
               <span class="ml-4">DASHBOARD</span>
             </a>
           </li>
-          <li class="px-2 py-1 sidebar-item" id="termination-log-nav">
-            <a href="#" onclick="showTerminationLog()" class="flex items-center text-white hover:text-green-500">
+          <li class="px-4 py-2 sidebar-item" id="termination-log-nav">
+            <a href="#" onclick="showTerminationLog()" class="flex items-center text-white hover:text-blue-300">
               <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
-              <span class="ml-4">Termination Log</span>
+              <span class="ml-4">TERMINATION LOG</span>
             </a>
           </li>
+          <!-- <li class="px-4 py-2 sidebar-item" id="heatmap-nav">
+            <a href="#" onclick="showHeatmap()" class="flex items-center text-white hover:text-blue-300">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+              <span class="ml-4">HEATMAP</span>
+            </a>
+          </li> -->
+          <li class="px-4 py-2 sidebar-item" id="top-consumers-nav">
+            <a href="#" onclick="showTopConsumers()" class="flex items-center text-white hover:text-blue-300">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+              </svg>
+              <span class="ml-4">TOP CONSUMERS</span>
+            </a>
+          </li>
+          <li class="px-4 py-2 sidebar-item" id="battery-status-nav">
+            <a href="#" onclick="showBatteryStatus()" class="flex items-center text-white hover:text-blue-300">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a2 2 0 00-2-2H5a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2zm6 0v-2a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2z" />
+              </svg>
+              <span class="ml-4">BATTERY STATUS</span>
+            </a>
+          </li>
+          <li class="px-4 py-2 sidebar-item" id="benchmark-nav">
+            <a href="#" onclick="showBenchmark()" class="flex items-center text-white hover:text-blue-300">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span class="ml-4">BENCHMARK</span>
+            </a>
+          </li>
+          <!-- <li class="px-4 py-2 sidebar-item" id="timeline-nav">
+            <a href="#" onclick="showTimeline()" class="flex items-center text-white hover:text-blue-300">
+              <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="ml-4">TIMELINE</span>
+            </a>
+          </li> -->
         </ul>
       </div>
     </aside>
@@ -53,9 +99,15 @@
 
     <!-- Main Content Section -->
     <div class="flex-1 overflow-y-auto">
-      <header class="bg-gray-800 py-4 px-6 flex justify-between items-center">
-        <h1 class="text-white text-lg font-semibold">System Monitor Dashboard</h1>
-        <button id="theme-toggle" class="text-white focus:outline-none">
+      <!-- CHANGE: Added shadow-sm and logo placeholder to header -->
+      <header class="bg-gray-800 py-4 px-6 flex justify-between items-center shadow-sm">
+        <div class="flex items-center">
+          <!-- Placeholder for logo -->
+          <svg class="h-6 w-6 mr-2 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v8m-4-4h8" /></svg>
+          <h1 class="text-white text-lg font-semibold">System Monitor Dashboard</h1>
+        </div>
+        <!-- CHANGE: Updated theme toggle with circular background -->
+        <button id="theme-toggle" class="text-white focus:outline-none bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center">
           🌙
         </button>
       </header>
@@ -63,20 +115,21 @@
       <!-- Dashboard Section -->
       <main id="dashboard-section" class="px-8 py-6">
         <!-- System Overview -->
-        <div class="bg-white p-4 shadow rounded-lg mb-6">
-          <h4 class="text-lg font-medium">System Overview</h4>
+        <!-- CHANGE: Updated card to bg-gray-900, rounded-xl, shadow-md, more padding -->
+        <div class="bg-gray-900 p-6 shadow-md rounded-xl mb-6 text-gray-100">
+          <h4 class="text-xl font-medium">System Overview</h4>
           <div class="grid grid-cols-3 gap-4">
             <div>
-              <p class="text-sm text-gray-600">Total CPU Usage</p>
-              <p id="total-cpu" class="text-lg font-semibold text-blue-500">--%</p>
+              <p class="text-sm text-gray-400">Total CPU Usage</p>
+              <p id="total-cpu" class="text-lg font-semibold text-blue-400">--%</p>
             </div>
             <div>
-              <p class="text-sm text-gray-600">Total Memory Usage</p>
-              <p id="total-memory" class="text-lg font-semibold text-green-500">--%</p>
+              <p class="text-sm text-gray-400">Total Memory Usage</p>
+              <p id="total-memory" class="text-lg font-semibold text-blue-400">--%</p> <!-- CHANGE: Unified color to blue-400 -->
             </div>
             <div>
-              <p class="text-sm text-gray-600">Running Processes</p>
-              <p id="total-processes" class="text-lg font-semibold text-gray-900">--</p>
+              <p class="text-sm text-gray-400">Running Processes</p>
+              <p id="total-processes" class="text-lg font-semibold text-gray-100">--</p>
             </div>
           </div>
         </div>
@@ -84,52 +137,55 @@
         <!-- CPU and Memory Usage -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <!-- CPU Usage -->
-          <div class="bg-white p-4 shadow rounded-lg">
+          <!-- CHANGE: Updated card styling -->
+          <div class="bg-gray-900 p-6 shadow-md rounded-xl hover:shadow-lg transition-shadow text-gray-100">
             <h5 class="text-lg font-medium">CPU Usage</h5>
-            <h3 id="cpu-text" class="text-blue-500">--%</h3>
+            <h3 id="cpu-text" class="text-blue-400">--%</h3>
             <div id="cpu-chart" style="height: 200px;"></div>
           </div>
 
           <!-- Memory Usage -->
-          <div class="bg-white p-4 shadow rounded-lg">
+          <div class="bg-gray-900 p-6 shadow-md rounded-xl hover:shadow-lg transition-shadow text-gray-100">
             <h5 class="text-lg font-medium">Memory Usage</h5>
-            <h3 id="memory-text" class="text-green-500">--%</h3>
+            <h3 id="memory-text" class="text-blue-400">--%</h3> <!-- CHANGE: Unified color to blue-400 -->
             <div id="memory-chart" style="height: 200px;"></div>
           </div>
         </div>
 
         <!-- Process Table -->
-        <div class="bg-white mt-8 p-4 shadow rounded-lg">
+        <!-- CHANGE: Updated card styling and table design -->
+        <div class="bg-gray-900 mt-8 p-6 shadow-md rounded-xl text-gray-100">
           <div class="flex justify-between items-center mb-4">
-            <h4 class="text-lg font-medium">Process List</h4>
+            <h4 class="text-xl font-medium">Process List</h4>
             <div class="flex items-center">
-              <button id="refresh-processes" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+              <!-- CHANGE: Refined button styling with icon -->
+              <button id="refresh-processes" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 flex items-center">
+                <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5m11 11v-5h-5m-6 0l6-6m6 6l-6-6" /></svg>
                 Refresh
               </button>
-              <!-- CHANGE: Added toggle for automatic updates -->
-              <div class="toggle-container">
+              <div class="toggle-container ml-4">
                 <input type="checkbox" id="auto-update-toggle" />
                 <label for="auto-update-toggle">Auto-update</label>
               </div>
             </div>
           </div>
           <div class="search-container">
-            <input type="text" id="process-search" placeholder="Search by process name or PID..." />
+            <input type="text" id="process-search" placeholder="Search by process name or PID..." class="bg-gray-800 text-gray-100" />
           </div>
           <div class="overflow-x-auto">
             <div id="process-loading" class="text-center py-4 hidden">
-              <svg class="animate-spin h-5 w-5 text-blue-500 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <svg class="animate-spin h-5 w-5 text-blue-400 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-              <span class="ml-2 text-gray-600">Loading...</span>
+              <span class="ml-2 text-gray-400">Loading...</span>
             </div>
-            <div id="process-error" class="text-center py-4 text-red-500 hidden">
+            <div id="process-error" class="text-center py-4 text-red-400 hidden">
               Failed to load processes. Please try again later.
             </div>
             <table id="process-table" class="table-auto min-w-full">
               <thead>
-                <tr>
+                <tr class="text-gray-400"> <!-- CHANGE: Lighter header text -->
                   <th class="px-4 py-2 cursor-pointer" onclick="sortTable('pid')">PID</th>
                   <th class="px-4 py-2 cursor-pointer" onclick="sortTable('name')">Name</th>
                   <th class="px-4 py-2 cursor-pointer" onclick="sortTable('cpu_percent')">CPU %</th>
@@ -147,18 +203,19 @@
       </main>
 
       <!-- Termination Log Section -->
+      <!-- CHANGE: Updated card styling -->
       <div id="termination-log-section" class="px-8 py-6 hidden">
-        <div class="bg-white p-4 shadow rounded-lg">
-          <h4 class="text-lg font-medium text-gray-900">Termination Log</h4>
+        <div class="bg-gray-900 p-6 shadow-md rounded-xl text-gray-100">
+          <h4 class="text-xl font-medium">Termination Log</h4>
           <div class="overflow-x-auto">
             <table class="table-auto min-w-full">
               <thead>
-                <tr>
-                  <th class="px-4 py-2 text-gray-600">PID</th>
-                  <th class="px-4 py-2 text-gray-600">Name</th>
-                  <th class="px-4 py-2 text-gray-600">CPU %</th>
-                  <th class="px-4 py-2 text-gray-600">Memory MB</th>
-                  <th class="px-4 py-2 text-gray-600">Threads</th>
+                <tr class="text-gray-400"> <!-- CHANGE: Lighter header text -->
+                  <th class="px-4 py-2">PID</th>
+                  <th class="px-4 py-2">Name</th>
+                  <th class="px-4 py-2">CPU %</th>
+                  <th class="px-4 py-2">Memory MB</th>
+                  <th class="px-4 py-2">Threads</th>
                 </tr>
               </thead>
               <tbody id="termination-log-body">
@@ -169,47 +226,235 @@
         </div>
       </div>
 
+      <!-- Heatmap Section
+<div id="heatmap-section" class="px-8 py-6 hidden">
+  <div class="bg-gray-900 p-6 shadow-md rounded-xl text-gray-100">
+    <h4 class="text-xl font-medium">Resource Usage Heatmap</h4>
+    <div id="heatmap-chart" style="height: 400px;"></div>
+  </div>
+</div> -->
+
+<!-- Top Consumers Section -->
+<div id="top-consumers-section" class="px-8 py-6 hidden">
+  <div class="bg-gray-900 p-6 shadow-md rounded-xl text-gray-100">
+    <h4 class="text-xl font-medium">Top Resource Consumers</h4>
+    <div class="flex items-center mb-4">
+      <button id="toggle-cpu" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mr-2">CPU</button>
+      <button id="toggle-memory" class="bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700">Memory</button>
+    </div>
+    <div id="top-consumers-list" class="space-y-2"></div>
+  </div>
+</div>
+
+<!-- Timeline Section
+<div id="timeline-section" class="px-8 py-6 hidden">
+  <div class="bg-gray-900 p-6 shadow-md rounded-xl text-gray-100">
+    <h4 class="text-xl font-medium">System Event Timeline</h4>
+    <div class="flex items-center mb-4">
+      <button id="zoom-in" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mr-2">Zoom In</button>
+      <button id="zoom-out" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Zoom Out</button>
+    </div>
+    <div id="timeline-chart" style="height: 400px;"></div>
+  </div>
+</div> -->
+
+<!--MAJOR CHANGES---------------------------------------------------------------------------------------------->
+<div id="battery-status-section" class="px-8 py-6 hidden">
+  <div class="bg-gray-900 p-6 shadow-md rounded-xl text-gray-100">
+    <h4 class="text-xl font-medium">Battery Status</h4>
+    <div class="flex justify-between items-center mb-4">
+      <div class="flex items-center">
+        <button id="refresh-battery" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 flex items-center">
+          <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h5m11 11v-5h-5m-6 0l6-6m6 6l-6-6" /></svg>
+          Refresh
+        </button>
+      </div>
+      <div class="toggle-container">
+        <input type="checkbox" id="auto-update-battery-toggle" />
+        <label for="auto-update-battery-toggle">Auto-update</label>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-4 mb-6">
+      <div>
+        <p class="text-sm text-gray-400">Battery Percentage</p>
+        <p id="battery-percentage" class="text-lg font-semibold text-blue-400">--%</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-400">Charging State</p>
+        <p id="charging-state" class="text-lg font-semibold text-gray-100">--</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-400">Time Remaining</p>
+        <p id="time-remaining" class="text-lg font-semibold text-gray-100">--</p>
+      </div>
+      <div>
+        <p class="text-sm text-gray-400">Power Consumption Rate</p>
+        <p id="power-consumption" class="text-lg font-semibold text-gray-100">-- W</p>
+      </div>
+    </div>
+    <h5 class="text-lg font-medium">Battery Level Over Time</h5>
+    <div id="battery-chart" style="height: 200px;"></div>
+  </div>
+</div>
+<!-- Benchmark Section -->
+<div id="benchmark-section" class="px-8 py-6 hidden">
+  <div class="bg-gray-900 p-6 shadow-md rounded-xl text-gray-100">
+    <h4 class="text-xl font-medium">Performance Benchmark</h4>
+    <div class="flex items-center mb-4">
+      <button id="run-cpu-benchmark" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 mr-2">Run CPU Stress Test</button>
+      <button id="run-memory-benchmark" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">Run Memory Allocation Test</button>
+    </div>
+    <div id="benchmark-loading" class="text-center py-4 hidden">
+      <svg class="animate-spin h-5 w-5 text-blue-400 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <span class="ml-2 text-gray-400">Running benchmark...</span>
+    </div>
+    <div id="benchmark-error" class="text-center py-4 text-red-400 hidden">
+      Failed to run benchmark. Please try again later.
+    </div>
+    <div id="benchmark-results" class="space-y-2 hidden">
+      <h5 class="text-lg font-medium">Benchmark Results</h5>
+      <p><strong>Test Type:</strong> <span id="test-type">--</span></p>
+      <p><strong>Score:</strong> <span id="benchmark-score">--</span></p>
+      <p><strong>Baseline Comparison:</strong> <span id="baseline-comparison">--</span></p>
+      <p><strong>System Load:</strong> <span id="system-load">--%</span></p>
+    </div>
+  </div>
+</div>
+
       <!-- Modal -->
-      <div id="process-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-1/2">
-          <h3 class="text-lg font-medium mb-4">Process Details</h3>
+      <!-- CHANGE: Updated modal to match dark theme with backdrop blur -->
+      <div id="process-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 backdrop-blur-sm flex items-center justify-center hidden">
+        <div class="bg-gray-900 p-6 rounded-lg shadow-lg w-1/2 text-gray-100">
+          <h3 class="text-lg font-medium mb-4 border-b border-gray-700">Process Details</h3> <!-- CHANGE: Added border -->
           <div id="process-details" class="space-y-2"></div>
-          <button id="close-modal" class="mt-4 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Close</button>
+          <button id="close-modal" class="mt-4 bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">Close</button>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    let cpuSeries = [], memorySeries = [];
-    let allProcesses = []; // Store all processes for filtering
-    let currentSearchTerm = ""; // Store the current search term
-    let sortDirection = 1; // 1 for ascending, -1 for descending
+    let cpuSeries = [], memorySeries = [], batterySeries = [];
+    let allProcesses = [];
+    let currentSearchTerm = "";
+    let sortDirection = 1;
     let lastSortedColumn = null;
     let isFetchingProcesses = false;
-    // CHANGE: Added flag to track auto-update state
     let autoUpdateEnabled = false;
+    let autoUpdateBatteryEnabled = false;
 
+    // Function to get chart label colors based on theme
+    function getChartLabelColors() {
+      const isDarkMode = document.documentElement.classList.contains('dark');
+      return {
+        colors: isDarkMode ? '#ffffff' : '#000000', // White in dark mode, black in light mode
+      };
+    }
+
+    // Initialize CPU Chart with dynamic label colors
     const cpuChart = new ApexCharts(document.querySelector("#cpu-chart"), {
       chart: { type: 'line', height: 200 },
       series: [{ name: "CPU %", data: [] }],
-      xaxis: { type: 'datetime' },
-      yaxis: { max: 100 },
-      colors: ['#3b82f6'],
-      stroke: { width: 2 }
+      xaxis: {
+        type: 'datetime',
+        labels: {
+          datetimeUTC: false,
+          format: 'HH:mm:ss',
+          style: getChartLabelColors(), // Dynamically set label colors
+        }
+      },
+      yaxis: {
+        max: 100,
+        labels: {
+          style: getChartLabelColors(), // Dynamically set label colors
+        }
+      },
+      colors: ['#60a5fa'],
+      stroke: { width: 2 },
+      grid: { show: true, borderColor: '#4b5563', strokeDashArray: 4 }
     });
 
+    // Initialize Memory Chart with dynamic label colors
     const memoryChart = new ApexCharts(document.querySelector("#memory-chart"), {
       chart: { type: 'line', height: 200 },
       series: [{ name: "Memory %", data: [] }],
-      xaxis: { type: 'datetime' },
-      yaxis: { max: 100 },
-      colors: ['#48bb78'],
-      stroke: { width: 2 }
+      xaxis: {
+        type: 'datetime',
+        labels: {
+          datetimeUTC: false,
+          format: 'HH:mm:ss',
+          style: getChartLabelColors(), // Dynamically set label colors
+        }
+      },
+      yaxis: {
+        max: 100,
+        labels: {
+          style: getChartLabelColors(), // Dynamically set label colors
+        }
+      },
+      colors: ['#60a5fa'],
+      stroke: { width: 2 },
+      grid: { show: true, borderColor: '#4b5563', strokeDashArray: 4 }
+    });
+
+    // Initialize Battery Chart with dynamic label colors
+    const batteryChart = new ApexCharts(document.querySelector("#battery-chart"), {
+      chart: { type: 'line', height: 200 },
+      series: [{ name: "Battery %", data: [] }],
+      xaxis: {
+        type: 'datetime',
+        labels: {
+          datetimeUTC: false,
+          format: 'HH:mm:ss',
+          style: getChartLabelColors(), // Dynamically set label colors
+        }
+      },
+      yaxis: {
+        max: 100,
+        labels: {
+          style: getChartLabelColors(), // Dynamically set label colors
+        }
+      },
+      colors: ['#60a5fa'],
+      stroke: { width: 2 },
+      grid: { show: true, borderColor: '#4b5563', strokeDashArray: 4 }
     });
 
     cpuChart.render();
     memoryChart.render();
+    batteryChart.render();
+
+    // Function to update chart label colors when theme changes
+    function updateChartThemes() {
+      const labelStyle = getChartLabelColors();
+      cpuChart.updateOptions({
+        xaxis: { labels: { style: labelStyle } },
+        yaxis: { labels: { style: labelStyle } }
+      });
+      memoryChart.updateOptions({
+        xaxis: { labels: { style: labelStyle } },
+        yaxis: { labels: { style: labelStyle } }
+      });
+      batteryChart.updateOptions({
+        xaxis: { labels: { style: labelStyle } },
+        yaxis: { labels: { style: labelStyle } }
+      });
+    }
+
+    // Function to reset graph data on dashboard load
+    function resetGraphData() {
+      cpuSeries = [];
+      memorySeries = [];
+      batterySeries = [];
+      const now = new Date().getTime();
+      cpuSeries.push([now, 0]);
+      memorySeries.push([now, 0]);
+      cpuChart.updateSeries([{ data: cpuSeries }]);
+      memoryChart.updateSeries([{ data: memorySeries }]);
+    }
 
     function updateUsage() {
       fetch("/get_system_usage")
@@ -221,10 +466,13 @@
           const now = new Date().getTime();
           cpuSeries.push([now, data.cpu_percent]);
           memorySeries.push([now, data.memory_percent]);
+          
           if (cpuSeries.length > 20) cpuSeries.shift();
           if (memorySeries.length > 20) memorySeries.shift();
+
           cpuChart.updateSeries([{ data: cpuSeries }]);
           memoryChart.updateSeries([{ data: memorySeries }]);
+
           document.getElementById("cpu-text").innerText = data.cpu_percent + "%";
           document.getElementById("memory-text").innerText = data.memory_percent + "%";
           document.getElementById("total-cpu").innerText = data.cpu_percent + "%";
@@ -239,7 +487,6 @@
       const table = document.getElementById("process-table-body");
       let processes = processesToDisplay || allProcesses;
 
-      // Apply the current search filter if there is a search term
       if (currentSearchTerm) {
         processes = processes.filter(process => 
           process.name.toLowerCase().includes(currentSearchTerm) ||
@@ -248,15 +495,16 @@
       }
 
       table.innerHTML = "";
-      processes.forEach(p => {
+      processes.forEach((p, index) => {
+        const rowClass = index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-900';
         table.innerHTML += `
-          <tr class="cursor-pointer hover:bg-gray-100" onclick="showProcessDetails(${JSON.stringify(p)})">
+          <tr class="${rowClass} cursor-pointer hover:bg-gray-700" onclick="showProcessDetails(${JSON.stringify(p)})">
             <td class="px-4 py-2">${p.pid}</td>
             <td class="px-4 py-2">${p.name}</td>
             <td class="px-4 py-2">${p.cpu_percent}</td>
             <td class="px-4 py-2">${p.memory_usage.toFixed(2)}</td>
             <td class="px-4 py-2">${p.num_threads}</td>
-            <td class="px-4 py-2"><button onclick="terminate(${p.pid}); event.stopPropagation();" class="bg-red-500 text-white px-2 py-1 rounded">Terminate</button></td>
+            <td class="px-4 py-2"><button onclick="terminate(${p.pid}); event.stopPropagation();" class="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 flex items-center"><svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>Terminate</button></td>
           </tr>`;
       });
     }
@@ -274,7 +522,7 @@
       errorMessage.classList.add("hidden");
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10-second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       fetch("/get_processes", { signal: controller.signal })
         .then(res => {
@@ -291,7 +539,6 @@
           allProcesses = data;
           document.getElementById("total-processes").innerText = allProcesses.length;
 
-          // Check for high resource usage
           const highUsageProcesses = allProcesses.filter(p => p.cpu_percent > 80 || p.memory_usage > 500);
           if (highUsageProcesses.length > 0) {
             const alertBanner = document.getElementById("resource-alert");
@@ -378,15 +625,27 @@
     function showDashboard() {
       document.getElementById('dashboard-section').classList.remove('hidden');
       document.getElementById('termination-log-section').classList.add('hidden');
+      document.getElementById('battery-status-section').classList.add('hidden');
+      document.getElementById('benchmark-section').classList.add('hidden');
+      document.getElementById('top-consumers-section').classList.add('hidden');
       document.getElementById('dashboard-nav').classList.add('active');
       document.getElementById('termination-log-nav').classList.remove('active');
+      document.getElementById('battery-status-nav').classList.remove('active');
+      document.getElementById('benchmark-nav').classList.remove('active');
+      document.getElementById('top-consumers-nav').classList.remove('active');
     }
 
     function showTerminationLog() {
       document.getElementById('dashboard-section').classList.add('hidden');
       document.getElementById('termination-log-section').classList.remove('hidden');
+      document.getElementById('battery-status-section').classList.add('hidden');
+      document.getElementById('benchmark-section').classList.add('hidden');
+      document.getElementById('top-consumers-section').classList.add('hidden');
       document.getElementById('dashboard-nav').classList.remove('active');
       document.getElementById('termination-log-nav').classList.add('active');
+      document.getElementById('battery-status-nav').classList.remove('active');
+      document.getElementById('benchmark-nav').classList.remove('active');
+      document.getElementById('top-consumers-nav').classList.remove('active');
 
       fetch("/get_terminated_processes")
         .then(res => {
@@ -396,9 +655,10 @@
         .then(data => {
           const table = document.getElementById("termination-log-body");
           table.innerHTML = "";
-          data.forEach(p => {
+          data.forEach((p, index) => {
+            const rowClass = index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-900';
             table.innerHTML += `
-              <tr>
+              <tr class="${rowClass}">
                 <td class="px-4 py-2">${p.pid}</td>
                 <td class="px-4 py-2">${p.name}</td>
                 <td class="px-4 py-2">${p.cpu_percent}</td>
@@ -412,7 +672,126 @@
         });
     }
 
-    // Event Listeners
+    // Battery Status Logic
+    function updateBatteryStatus() {
+      fetch('/get_battery_status')
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.json();
+        })
+        .then(data => {
+          const now = new Date().getTime();
+          document.getElementById("battery-percentage").innerText = `${data.percent}%`;
+          document.getElementById("charging-state").innerText = data.power_plugged ? "Charging" : "Discharging";
+          document.getElementById("time-remaining").innerText = data.secsleft === -1 ? "N/A" : `${Math.round(data.secsleft / 60)} mins`;
+          document.getElementById("power-consumption").innerText = `${data.power_consumption.toFixed(2)} W`;
+
+          batterySeries.push([now, data.percent]);
+          if (batterySeries.length > 20) batterySeries.shift();
+          batteryChart.updateSeries([{ data: batterySeries }]);
+        })
+        .catch(error => {
+          console.error("Error fetching battery status:", error);
+          document.getElementById("battery-percentage").innerText = "Error";
+          document.getElementById("charging-state").innerText = "Error";
+          document.getElementById("time-remaining").innerText = "Error";
+          document.getElementById("power-consumption").innerText = "Error";
+        });
+    }
+
+    function showBatteryStatus() {
+      document.getElementById('dashboard-section').classList.add('hidden');
+      document.getElementById('termination-log-section').classList.add('hidden');
+      document.getElementById('battery-status-section').classList.remove('hidden');
+      document.getElementById('benchmark-section').classList.add('hidden');
+      document.getElementById('top-consumers-section').classList.add('hidden');
+      document.getElementById('dashboard-nav').classList.remove('active');
+      document.getElementById('termination-log-nav').classList.remove('active');
+      document.getElementById('battery-status-nav').classList.add('active');
+      document.getElementById('benchmark-nav').classList.remove('active');
+      document.getElementById('top-consumers-nav').classList.remove('active');
+      updateBatteryStatus();
+    }
+
+    // Benchmark Logic
+    function runBenchmark(testType) {
+      const loading = document.getElementById("benchmark-loading");
+      const error = document.getElementById("benchmark-error");
+      const results = document.getElementById("benchmark-results");
+
+      loading.classList.remove("hidden");
+      error.classList.add("hidden");
+      results.classList.add("hidden");
+
+      fetch('/run_benchmark', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ test_type: testType })
+      })
+        .then(res => {
+          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+          return res.json();
+        })
+        .then(data => {
+          loading.classList.add("hidden");
+          results.classList.remove("hidden");
+          document.getElementById("test-type").innerText = data.test_type;
+          document.getElementById("benchmark-score").innerText = data.score;
+          document.getElementById("baseline-comparison").innerText = data.baseline_comparison;
+          document.getElementById("system-load").innerText = `${data.system_load}%`;
+        })
+        .catch(error => {
+          loading.classList.add("hidden");
+          error.classList.remove("hidden");
+          error.textContent = `Failed to run benchmark: ${error.message}. Please try again later.`;
+          console.error("Error running benchmark:", error);
+        });
+    }
+
+    function showBenchmark() {
+      document.getElementById('dashboard-section').classList.add('hidden');
+      document.getElementById('termination-log-section').classList.add('hidden');
+      document.getElementById('battery-status-section').classList.add('hidden');
+      document.getElementById('benchmark-section').classList.remove('hidden');
+      document.getElementById('top-consumers-section').classList.add('hidden');
+      document.getElementById('dashboard-nav').classList.remove('active');
+      document.getElementById('termination-log-nav').classList.remove('active');
+      document.getElementById('battery-status-nav').classList.remove('active');
+      document.getElementById('benchmark-nav').classList.add('active');
+      document.getElementById('top-consumers-nav').classList.remove('active');
+    }
+
+    // Top Consumers Logic
+    let topConsumersMode = 'cpu';
+    function updateTopConsumers() {
+      fetch('/get_processes')
+        .then(res => res.json())
+        .then(data => {
+          const sorted = data.sort((a, b) => topConsumersMode === 'cpu' ? b.cpu_percent - a.cpu_percent : b.memory_usage - a.memory_usage).slice(0, 5);
+          const list = document.getElementById('top-consumers-list');
+          list.innerHTML = sorted.map(p => `
+            <div class="flex justify-between">
+              <span>${p.name} (PID: ${p.pid})</span>
+              <span>${topConsumersMode === 'cpu' ? p.cpu_percent + '%' : p.memory_usage + ' MB'}</span>
+            </div>
+          `).join('');
+        });
+    }
+
+    function showTopConsumers() {
+      document.getElementById('dashboard-section').classList.add('hidden');
+      document.getElementById('termination-log-section').classList.add('hidden');
+      document.getElementById('battery-status-section').classList.add('hidden');
+      document.getElementById('benchmark-section').classList.add('hidden');
+      document.getElementById('top-consumers-section').classList.remove('hidden');
+      document.getElementById('dashboard-nav').classList.remove('active');
+      document.getElementById('termination-log-nav').classList.remove('active');
+      document.getElementById('battery-status-nav').classList.remove('active');
+      document.getElementById('benchmark-nav').classList.remove('active');
+      document.getElementById('top-consumers-nav').classList.add('active');
+      updateTopConsumers();
+    }
+
     document.addEventListener("DOMContentLoaded", function() {
       const searchInput = document.getElementById("process-search");
       if (searchInput) {
@@ -441,31 +820,69 @@
         });
       }
 
-      // CHANGE: Add event listener for the auto-update toggle
       const autoUpdateToggle = document.getElementById("auto-update-toggle");
       if (autoUpdateToggle) {
         autoUpdateToggle.addEventListener("change", function() {
           autoUpdateEnabled = this.checked;
           localStorage.setItem("autoUpdateEnabled", autoUpdateEnabled);
         });
-        // Load the saved state from localStorage
         const savedAutoUpdate = localStorage.getItem("autoUpdateEnabled");
         autoUpdateEnabled = savedAutoUpdate === "true";
         autoUpdateToggle.checked = autoUpdateEnabled;
       }
 
+      const autoUpdateBatteryToggle = document.getElementById("auto-update-battery-toggle");
+      if (autoUpdateBatteryToggle) {
+        autoUpdateBatteryToggle.addEventListener("change", function() {
+          autoUpdateBatteryEnabled = this.checked;
+          localStorage.setItem("autoUpdateBatteryEnabled", autoUpdateBatteryEnabled);
+        });
+        const savedBatteryAutoUpdate = localStorage.getItem("autoUpdateBatteryEnabled");
+        autoUpdateBatteryEnabled = savedBatteryAutoUpdate === "true";
+        autoUpdateBatteryToggle.checked = autoUpdateBatteryEnabled;
+      }
+
+      const refreshBatteryButton = document.getElementById("refresh-battery");
+      if (refreshBatteryButton) {
+        refreshBatteryButton.addEventListener("click", updateBatteryStatus);
+      }
+
+      document.getElementById("run-cpu-benchmark").addEventListener("click", () => runBenchmark("cpu"));
+      document.getElementById("run-memory-benchmark").addEventListener("click", () => runBenchmark("memory"));
+
+      resetGraphData();
       updateUsage();
       fetchAndUpdateProcesses();
+      updateBatteryStatus();
     });
 
-    // Theme Toggle
     const toggleTheme = () => {
       const html = document.documentElement;
       const isDarkMode = html.classList.toggle('dark');
       const themeToggle = document.getElementById('theme-toggle');
       themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
       localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+      // Update chart label colors when theme changes
+      updateChartThemes();
     };
+
+    document.getElementById('toggle-cpu').addEventListener('click', () => {
+      topConsumersMode = 'cpu';
+      document.getElementById('toggle-cpu').classList.add('bg-blue-600', 'hover:bg-blue-700');
+      document.getElementById('toggle-cpu').classList.remove('bg-gray-600', 'hover:bg-gray-700');
+      document.getElementById('toggle-memory').classList.add('bg-gray-600', 'hover:bg-gray-700');
+      document.getElementById('toggle-memory').classList.remove('bg-blue-600', 'hover:bg-blue-700');
+      updateTopConsumers();
+    });
+
+    document.getElementById('toggle-memory').addEventListener('click', () => {
+      topConsumersMode = 'memory';
+      document.getElementById('toggle-memory').classList.add('bg-blue-600', 'hover:bg-blue-700');
+      document.getElementById('toggle-memory').classList.remove('bg-gray-600', 'hover:bg-gray-700');
+      document.getElementById('toggle-cpu').classList.add('bg-gray-600', 'hover:bg-gray-700');
+      document.getElementById('toggle-cpu').classList.remove('bg-blue-600', 'hover:bg-blue-700');
+      updateTopConsumers();
+    });
 
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
@@ -478,13 +895,33 @@
 
     document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
 
-    // CHANGE: Modified setInterval to check the auto-update toggle state
     setInterval(() => {
       updateUsage();
       if (autoUpdateEnabled) {
         fetchAndUpdateProcesses();
+        updateTopConsumers();
+      }
+      if (autoUpdateBatteryEnabled) {
+        updateBatteryStatus();
       }
     }, 5000);
+
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .sidebar-item.active {
+        background-color: #374151;
+        border-left: 3px solid #60a5fa;
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-in;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+    `;
+    document.head.appendChild(style);
   </script>
-</body>
+    
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'926872bc3b3b1d64',t:'MTc0MzAxMDk4NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
