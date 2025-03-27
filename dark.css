@@ -1,12 +1,13 @@
 .sidebar-item.active {
-  background-color: #4a5568; /* Gray background for active item */
-  color: #48bb78; /* Green text for active item */
+  background-color: #10b981; /* Green background for active item (Tailwind's green-500) */
+  color: #ffffff; /* White text for active item */
+  border-left: 3px solid #ffffff; /* White border to complement the green background */
 }
 .sidebar-item.active svg {
-  stroke: #48bb78; /* Green icon for active item */
+  stroke: #ffffff; /* White icon for active item */
 }
 .sidebar-item:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Subtle white overlay on hover */
+  background-color: rgba(16, 185, 129, 0.2); /* Subtle green overlay on hover (green-500 with opacity) */
   transition: background-color 0.2s ease-in-out;
 }
 .search-container {
@@ -27,11 +28,11 @@
 }
 /* Sidebar background color with gradient and shadow */
 aside {
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background: linear-gradient(135deg, #4a5568 0%, #4a5568 100%);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 aside .bg-gray-800 {
-  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  background: linear-gradient(135deg, #4a5568 0%, #4a5568 100%);
 }
 aside .text-white {
   color: #ffffff;
@@ -41,20 +42,22 @@ aside .hover\:text-green-500:hover {
 }
 /* Dark mode adjustments */
 .dark aside {
-  background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
+  background: linear-gradient(135deg, #4a5568 0%, #4a5568 100%);
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
 }
 .dark aside .bg-gray-800 {
-  background: linear-gradient(135deg, #27ae60 0%, #219653 100%);
+  background: linear-gradient(135deg, #4a5568 0%, #4a5568 100%);
 }
 .dark .sidebar-item:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(16, 185, 129, 0.2); /* Subtle green overlay on hover in dark mode */
 }
 .dark .search-container input {
   border-color: #718096;
 }
 .dark .sidebar-item.active {
-  background-color: #718096;
+  background-color: #10b981; /* Green background for active item in dark mode */
+  color: #ffffff; /* White text for active item in dark mode */
+  border-left: 3px solid #ffffff; /* White border in dark mode */
 }
 /* Chart styles */
 #cpu-chart, #memory-chart {
@@ -92,8 +95,11 @@ table td, table th {
   color: #e2e8f0;
 }
 /* Alert styles */
+#resource-alert {
+  background-color: #10b981; /* Green background for the warning banner (Tailwind's green-500) */
+}
 .dark #resource-alert {
-  background-color: #d69e2e;
+  background-color: #10b981; /* Green background in dark mode */
 }
 /* Header styles */
 header {
@@ -102,7 +108,7 @@ header {
 .dark header {
   background-color: #2d3748;
 }
-/* CHANGE: Style for the toggle switch */
+/* Style for the toggle switch */
 .toggle-container {
   display: flex;
   align-items: center;
